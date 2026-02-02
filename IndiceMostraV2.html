@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University of Padova – Ski Technology Exhibition</title>
+    <style>
+        /* Reset e stili base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 25px 20px;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .unipd-logo {
+            height: 60px;
+            margin-bottom: 15px;
+        }
+
+        .exhibition-title {
+            color: #333;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .date-location {
+            color: #666;
+            font-size: 1rem;
+            font-weight: 500;
+            background: #fff5f5;
+            padding: 8px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            border: 1px solid #ffcccc;
+        }
+
+        .department {
+            color: #990000;
+            font-size: 0.9rem;
+            margin-top: 12px;
+            font-weight: 600;
+        }
+
+        /* Controlli e statistiche */
+        .controls-container {
+            padding: 20px 15px;
+            background: white;
+            margin: 15px;
+            border-radius: 15px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            flex: 1;
+            min-width: 100px;
+            max-width: 200px;
+        }
+
+        .filter-btn.all {
+            background: #990000;
+            color: white;
+        }
+
+        .filter-btn.visited {
+            background: #ffcccc;
+            color: #990000;
+        }
+
+        .filter-btn.available {
+            background: #e6f7ff;
+            color: #0066cc;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stats-counter {
+            background: linear-gradient(135deg, #990000 0%, #cc0000 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(153, 0, 0, 0.2);
+        }
+
+        .stats-title {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .stats-numbers {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 5px 0;
+        }
+
+        /* Griglia documenti */
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            padding: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Box documento */
+        .document-box {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+
+        .document-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #990000;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .document-box:hover::before {
+            transform: scaleX(1);
+        }
+
+        .document-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: #990000;
+        }
+
+        .document-box.available {
+            border: 2px solid #990000;
+        }
+
+        .document-box.available:hover {
+            background: #fff5f5;
+        }
+
+        .document-box.disabled {
+            background: #f8f9fa;
+            color: #999;
+            cursor: not-allowed;
+            border: 2px dashed #ccc;
+            opacity: 0.7;
+        }
+
+        .document-box.disabled:hover {
+            transform: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            border-color: #ccc;
+        }
+
+        .document-box.visited {
+            background: linear-gradient(135deg, #fff5f5 0%, #ffebeb 100%);
+            border: 2px solid #ff6666;
+        }
+
+        /* Contenuto box */
+        .doc-number {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #990000;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .doc-number::before {
+            content: '📄';
+            font-size: 1.2rem;
+        }
+
+        .disabled .doc-number {
+            color: #999;
+        }
+
+        .visited .doc-number {
+            color: #ff3333;
+        }
+
+        .doc-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            flex-grow: 1;
+        }
+
+        /* Indicatore visitato visivo */
+        .visited-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 12px;
+            height: 12px;
+            background: #4CAF50;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: none;
+        }
+
+        .visited .visited-indicator {
+            display: block;
+        }
+
+        /* Footer semplificato */
+        .footer {
+            text-align: center;
+            padding: 25px 20px;
+            margin-top: 30px;
+            background: white;
+            border-top: 3px solid #990000;
+        }
+
+        .university-info {
+            color: #990000;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .research-group {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive per smartphone */
+        @media (max-width: 768px) {
+            .documents-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 12px;
+                padding: 12px;
+            }
+            
+            .unipd-logo {
+                height: 50px;
+            }
+            
+            .exhibition-title {
+                font-size: 1.2rem;
+            }
+            
+            .date-location {
+                font-size: 0.9rem;
+                padding: 6px 15px;
+            }
+            
+            .department {
+                font-size: 0.85rem;
+            }
+            
+            .filter-btn {
+                padding: 8px 15px;
+                font-size: 0.85rem;
+                min-width: 90px;
+            }
+            
+            .doc-number {
+                font-size: 1.3rem;
+            }
+            
+            .doc-title {
+                font-size: 1rem;
+            }
+            
+            .controls-container {
+                margin: 10px;
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .documents-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .unipd-logo {
+                height: 45px;
+            }
+            
+            .exhibition-title {
+                font-size: 1.1rem;
+            }
+            
+            .date-location {
+                font-size: 0.85rem;
+                padding: 5px 12px;
+            }
+            
+            .filter-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .filter-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .stats-counter {
+                padding: 12px;
+            }
+            
+            .stats-numbers {
+                font-size: 1.6rem;
+            }
+            
+            .document-box {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 320px) {
+            .exhibition-title {
+                font-size: 1rem;
+            }
+            
+            .date-location {
+                font-size: 0.8rem;
+            }
+            
+            .department {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <!-- Logo UniPD -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/University_of_Padua_logo.svg/2560px-University_of_Padua_logo.svg.png" 
+             alt="University of Padova Logo" 
+             class="unipd-logo"
+             onerror="this.style.display='none'">
+        
+        <h1 class="exhibition-title">International Ski Exhibition</h1>
+        <div class="date-location">Longarone, 9th January 2026 – 28th February 2026</div>
+        <div class="department">Department of Industrial Engineering</div>
+    </header>
+
+    <div class="controls-container">
+        <div class="filter-buttons">
+            <button class="filter-btn all" onclick="showAll()">All</button>
+            <button class="filter-btn visited" onclick="showVisited()">Visited</button>
+            <button class="filter-btn available" onclick="showAvailable()">Available</button>
+        </div>
+        
+        <div class="stats-counter">
+            <div class="stats-title">VIEWING PROGRESS</div>
+            <div class="stats-numbers" id="progressCounter">0/0</div>
+        </div>
+    </div>
+
+    <div class="documents-grid" id="documentsGrid">
+        <!-- Document 1 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/01_A2%20University%20and%20research%20for%20innovation.pdf', 1)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">01</div>
+            <div class="doc-title">University and Research for Innovation</div>
+        </div>
+
+        <!-- Document 2 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/02_A4%20Ski%20vibrations.pdf', 2)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">02</div>
+            <div class="doc-title">Ski Vibrations Analysis</div>
+        </div>
+
+        <!-- Document 3 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/03_A5%20Instruction_Vibrations.pdf', 3)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">03</div>
+            <div class="doc-title">Instructions – Vibration Testing</div>
+        </div>
+
+        <!-- Document 4 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/04_A4%20Proto%20Ski%20instrumented%2022%20SG.pdf', 4)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">04</div>
+            <div class="doc-title">Instrumented Ski Prototype (22 Strain Gauges)</div>
+        </div>
+
+        <!-- Document 5 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/05_A5%20Dynamometric%20plates.pdf', 5)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">05</div>
+            <div class="doc-title">Dynamometric Plates</div>
+        </div>
+
+        <!-- Document 6 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/06_A5%20Dynamometric%20LoadCells.pdf', 6)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">06</div>
+            <div class="doc-title">Dynamometric Load Cells</div>
+        </div>
+
+        <!-- Document 7 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/07_A4%20Ski%20Pressure%20bench%20Slytech.pdf', 7)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">07</div>
+            <div class="doc-title">Ski Pressure Test Bench (Slytech)</div>
+        </div>
+
+        <!-- Document 8 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/08_A4%20CutResistant%20suit.pdf', 8)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">08</div>
+            <div class="doc-title">Cut-Resistant Racing Suit</div>
+        </div>
+
+        <!-- Document 9 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/09_A3%20Sensorized%20leg.pdf', 9)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">09</div>
+            <div class="doc-title">Sensorized Leg Dummy for Knee Braces</div>
+        </div>
+
+        <!-- Document 10 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/10_A3%20Knee%20bench.pdf', 10)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">10</div>
+            <div class="doc-title">Dynamic Knee Brace Test Bench</div>
+        </div>
+
+        <!-- Document 11 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/11_A4%20Airbag%20Dainese.pdf', 11)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">11</div>
+            <div class="doc-title">Dainese Airbag Protection System</div>
+        </div>
+
+        <!-- Document 12 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/12_A2%20Skier%20athlete.pdf', 12)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">12</div>
+            <div class="doc-title">The Athlete: Maximizing Performance</div>
+        </div>
+
+        <!-- Document 13 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/13_A4%20Biofidelic%20head.pdf', 13)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">13</div>
+            <div class="doc-title">Biofidelic Head Replica (IHHR)</div>
+        </div>
+
+        <!-- Document 14 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/14_A4%20Biofidelic%20neck.pdf', 14)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">14</div>
+            <div class="doc-title">Biofidelic Neck Replica (BINS)</div>
+        </div>
+
+        <!-- Document 15 -->
+        <div class="document-box disabled">
+            <div class="doc-number">15</div>
+            <div class="doc-title">Coming Soon</div>
+        </div>
+
+        <!-- Document 16 -->
+        <div class="document-box disabled">
+            <div class="doc-number">16</div>
+            <div class="doc-title">Coming Soon</div>
+        </div>
+
+        <!-- Document 17 -->
+        <div class="document-box disabled">
+            <div class="doc-number">17</div>
+            <div class="doc-title">Coming Soon</div>
+        </div>
+
+        <!-- Document 18 -->
+        <div class="document-box disabled">
+            <div class="doc-number">18</div>
+            <div class="doc-title">Coming Soon</div>
+        </div>
+
+        <!-- Document 19 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/19_A4%20sustainability.pdf', 19)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">19</div>
+            <div class="doc-title">Sustainable Materials Research</div>
+        </div>
+
+        <!-- Document 20 -->
+        <div class="document-box disabled">
+            <div class="doc-number">20</div>
+            <div class="doc-title">Coming Soon</div>
+        </div>
+
+        <!-- Document 21 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/21_A3%20Flex%20index.pdf', 21)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">21</div>
+            <div class="doc-title">Flex Index Test Bench</div>
+        </div>
+
+        <!-- Document 22 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/22_A4%20Innovative%20Sensorized%20ski%20boot.pdf', 22)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">22</div>
+            <div class="doc-title">Innovative Sensorized Ski Boot (DAHU)</div>
+        </div>
+
+        <!-- Document 23 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/23_A5%20Instruction_FlexTest.pdf', 23)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">23</div>
+            <div class="doc-title">Instructions – Flex Testing</div>
+        </div>
+
+        <!-- Document 24 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/24_A4%20Sensorized%20SKI-ALP%20boot.pdf', 24)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">24</div>
+            <div class="doc-title">Sensorized SKI-ALP Boot</div>
+        </div>
+
+        <!-- Document 25 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/25_A4%20SG%20SkiBoot.pdf', 25)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">25</div>
+            <div class="doc-title">SG Ski Boot Analysis</div>
+        </div>
+
+        <!-- Document 26 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/26_A4%20Sensorized%20ski%20boot%20(pressure,%20rotation,%20load).pdf', 26)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">26</div>
+            <div class="doc-title">Sensorized Ski Boot (Pressure, Rotation, Load)</div>
+        </div>
+
+        <!-- Document 27 -->
+        <div class="document-box available visited" 
+             onclick="openPDF('https://unipdit-my.sharepoint.com/:b:/r/personal/alberto_foltran_studenti_unipd_it/Documents/Borsa/Mostra%20sci/Didascalie/ENGLISH_PDF/27_A4%20Loads%20on%20buckles.pdf', 27)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">27</div>
+            <div class="doc-title">Load Analysis on Ski Boot Buckles</div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="university-info">University of Padova – Department of Industrial Engineering</div>
+        <div class="research-group">Sports Engineering Research Group</div>
+        <div class="research-group">Authors: Nicola Petrone, Alberto Foltran</div>
+    </footer>
+
+    <script>
+        // Gestione stato visitato con localStorage
+        let visitedDocs = JSON.parse(localStorage.getItem('visitedDocs')) || [];
+        
+        // Inizializzazione al caricamento della pagina
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+            applyVisitedStatus();
+        });
+        
+        // Funzione per aprire PDF e registrare come visitato
+        function openPDF(url, docNumber) {
+            // Apri PDF in nuova finestra
+            window.open(url, '_blank');
+            
+            // Registra come visitato se non già registrato
+            if (!visitedDocs.includes(docNumber)) {
+                visitedDocs.push(docNumber);
+                localStorage.setItem('visitedDocs', JSON.stringify(visitedDocs));
+                
+                // Aggiorna UI
+                const docBox = document.querySelector(`.document-box[onclick*="${docNumber}"]`);
+                if (docBox) {
+                    docBox.classList.add('visited');
+                    const indicator = docBox.querySelector('.visited-indicator');
+                    if (indicator) {
+                        indicator.style.display = 'block';
+                    }
+                }
+                
+                updateProgress();
+            }
+        }
+        
+        // Funzione per aggiornare contatore progresso
+        function updateProgress() {
+            const totalAvailable = document.querySelectorAll('.document-box.available').length;
+            const visitedCount = visitedDocs.length;
+            
+            document.getElementById('progressCounter').textContent = `${visitedCount}/${totalAvailable}`;
+            
+            // Cambia colore in base al progresso
+            const percentage = (visitedCount / totalAvailable) * 100;
+            const counter = document.getElementById('progressCounter');
+            
+            if (percentage >= 75) {
+                counter.style.color = '#4CAF50';
+            } else if (percentage >= 50) {
+                counter.style.color = '#FFC107';
+            } else {
+                counter.style.color = 'white';
+            }
+        }
+        
+        // Applica stato visitato ai box
+        function applyVisitedStatus() {
+            visitedDocs.forEach(docNumber => {
+                const docBox = document.querySelector(`.document-box[onclick*="${docNumber}"]`);
+                if (docBox) {
+                    docBox.classList.add('visited');
+                    const indicator = docBox.querySelector('.visited-indicator');
+                    if (indicator) {
+                        indicator.style.display = 'block';
+                    }
+                }
+            });
+            updateProgress();
+        }
+        
+        // Funzioni filtro
+        function showAll() {
+            document.querySelectorAll('.document-box').forEach(box => {
+                box.style.display = 'flex';
+            });
+        }
+        
+        function showVisited() {
+            document.querySelectorAll('.document-box').forEach(box => {
+                const docNumber = getDocNumberFromBox(box);
+                if (visitedDocs.includes(docNumber)) {
+                    box.style.display = 'flex';
+                } else {
+                    box.style.display = 'none';
+                }
+            });
+        }
+        
+        function showAvailable() {
+            document.querySelectorAll('.document-box').forEach(box => {
+                if (box.classList.contains('disabled')) {
+                    box.style.display = 'none';
+                } else {
+                    box.style.display = 'flex';
+                }
+            });
+        }
+        
+        // Helper per estrarre numero documento dal box
+        function getDocNumberFromBox(box) {
+            const numberElement = box.querySelector('.doc-number');
+            if (numberElement) {
+                const text = numberElement.textContent.trim();
+                return parseInt(text.replace(/\D/g, ''));
+            }
+            return null;
+        }
+        
+        // Aggiungi supporto per tastiera (accessibilità)
+        document.querySelectorAll('.document-box.available').forEach(box => {
+            box.setAttribute('tabindex', '0');
+            box.setAttribute('role', 'button');
+            box.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const onclickAttr = this.getAttribute('onclick');
+                    if (onclickAttr) {
+                        const match = onclickAttr.match(/openPDF\('([^']+)', (\d+)\)/);
+                        if (match) {
+                            openPDF(match[1], parseInt(match[2]));
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Gestione tocco per dispositivi mobili
+        let touchStartTime = 0;
+        document.querySelectorAll('.document-box.available').forEach(box => {
+            box.addEventListener('touchstart', function() {
+                touchStartTime = Date.now();
+            });
+            
+            box.addEventListener('touchend', function(e) {
+                const touchDuration = Date.now() - touchStartTime;
+                if (touchDuration < 500) { // Tocco breve
+                    const onclickAttr = this.getAttribute('onclick');
+                    if (onclickAttr) {
+                        const match = onclickAttr.match(/openPDF\('([^']+)', (\d+)\)/);
+                        if (match) {
+                            openPDF(match[1], parseInt(match[2]));
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
