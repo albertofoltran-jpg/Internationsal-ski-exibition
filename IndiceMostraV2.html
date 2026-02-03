@@ -246,9 +246,9 @@
         }
 
         .document-box.visited {
-            background: linear-gradient(135deg, #a80000 0%, #8b0000 100%) !important;
+            background: linear-gradient(135deg, #d1495a 0%, #c41e3a 100%) !important;
             color: white;
-            border: 2px solid #660000 !important;
+            border: 2px solid #a61c2f !important;
         }
 
         .document-box.visited .doc-title {
@@ -673,28 +673,31 @@
         // Funzione per aprire PDF e registrare come visitato (sessionStorage)
         function openPDF(url, docNumber) {
             // Apri PDF in nuova finestra
-            window.open(url, '_blank');
+            const pdfWindow = window.open(url, '_blank');
 
-            // Registra come visitato se non già registrato
-            if (!visitedDocs.includes(docNumber)) {
-                visitedDocs.push(docNumber);
-                try {
-                    sessionStorage.setItem(SESSION_KEY, JSON.stringify(visitedDocs));
-                } catch (e) {
-                    // sessionStorage potrebbe non essere disponibile (privacy mode)
-                }
-
-                // Aggiorna UI
-                const docBox = document.querySelector(`.document-box[onclick*="${docNumber}"]`);
-                if (docBox) {
-                    docBox.classList.add('visited');
-                    const indicator = docBox.querySelector('.visited-indicator');
-                    if (indicator) {
-                        indicator.style.display = 'block';
+            // Registra come visitato se non già registrato, ma solo dopo che il PDF è stato aperto
+            if (!visitedDocs.includes(docNumber) && pdfWindow) {
+                // Aggiungi un piccolo ritardo per essere sicuro che il PDF si sta caricando
+                setTimeout(() => {
+                    visitedDocs.push(docNumber);
+                    try {
+                        sessionStorage.setItem(SESSION_KEY, JSON.stringify(visitedDocs));
+                    } catch (e) {
+                        // sessionStorage potrebbe non essere disponibile (privacy mode)
                     }
-                }
 
-                updateProgress();
+                    // Aggiorna UI
+                    const docBox = document.querySelector(`.document-box[onclick*="${docNumber}"]`);
+                    if (docBox) {
+                        docBox.classList.add('visited');
+                        const indicator = docBox.querySelector('.visited-indicator');
+                        if (indicator) {
+                            indicator.style.display = 'block';
+                        }
+                    }
+
+                    updateProgress();
+                }, 500); // Aspetta 500ms prima di segnare come visitato
             }
         }
         
