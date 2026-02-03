@@ -221,11 +221,6 @@
             border-color: #ccc;
         }
 
-        .document-box.visited {
-            background: linear-gradient(135deg, #fff5f5 0%, #ffebeb 100%);
-            border: 2px solid #ff6666;
-        }
-
         /* Contenuto box */
         .doc-number {
             font-size: 1.5rem;
@@ -247,7 +242,17 @@
         }
 
         .visited .doc-number {
-            color: #ff3333;
+            color: #cc0000;
+        }
+
+        .document-box.visited {
+            background: linear-gradient(135deg, #a80000 0%, #8b0000 100%) !important;
+            color: white;
+            border: 2px solid #660000 !important;
+        }
+
+        .document-box.visited .doc-title {
+            color: white;
         }
 
         .doc-title {
@@ -548,97 +553,97 @@
         </div>
 
         <!-- Document 15 -->
-        <div class="document-box disabled">
+        <div class="document-box available" 
+             onclick="openPDF('pdfs/15_A3_Mattress Protection Test.pdf', 15)">
+            <div class="visited-indicator"></div>
             <div class="doc-number">15</div>
-            <div class="doc-title">Coming Soon</div>
+            <div class="doc-title">Mattress Protection Test</div>
         </div>
 
         <!-- Document 16 -->
-        <div class="document-box disabled">
+        <div class="document-box available" 
+             onclick="openPDF('pdfs/16_A3_Protection Nets Test.pdf', 16)">
+            <div class="visited-indicator"></div>
             <div class="doc-number">16</div>
-            <div class="doc-title">Coming Soon</div>
+            <div class="doc-title">Protection Nets Test</div>
         </div>
 
         <!-- Document 17 -->
-        <div class="document-box disabled">
+        <div class="document-box available" 
+             onclick="openPDF('pdfs/17_A3_Type A Nets Tests.pdf', 17)">
+            <div class="visited-indicator"></div>
             <div class="doc-number">17</div>
-            <div class="doc-title">Coming Soon</div>
+            <div class="doc-title">Type A Nets Tests</div>
         </div>
 
         <!-- Document 18 -->
-        <div class="document-box disabled">
+        <div class="document-box available" 
+             onclick="openPDF('pdfs/18_A4 sustainability.pdf', 18)">
+            <div class="visited-indicator"></div>
             <div class="doc-number">18</div>
-            <div class="doc-title">Coming Soon</div>
+            <div class="doc-title">Sustainability Research</div>
         </div>
 
         <!-- Document 19 -->
-        <div class="document-box available visited" 
-             onclick="openPDF('pdfs/19_A4 sustainability.pdf', 19)">
-            <div class="visited-indicator"></div>
-            <div class="doc-number">19</div>
-            <div class="doc-title">Sustainable Materials Research</div>
-        </div>
-
-        <!-- Document 20 -->
         <div class="document-box disabled">
-            <div class="doc-number">20</div>
+            <div class="doc-number">19</div>
             <div class="doc-title">Coming Soon</div>
         </div>
 
+        <!-- Document 20 -->
+        <div class="document-box available" 
+             onclick="openPDF('pdfs/20_A3 Flex index.pdf', 20)">
+            <div class="visited-indicator"></div>
+            <div class="doc-number">20</div>
+            <div class="doc-title">Flex Index</div>
+        </div>
+
         <!-- Document 21 -->
-        <div class="document-box available visited" 
-             onclick="openPDF('pdfs/21_A3 Flex index.pdf', 21)">
+        <div class="document-box available" 
+             onclick="openPDF('pdfs/21_A4 Innovative Sensorized ski boot.pdf', 21)">
             <div class="visited-indicator"></div>
             <div class="doc-number">21</div>
-            <div class="doc-title">Flex Index Test Bench</div>
+            <div class="doc-title">Innovative Sensorized Ski Boot</div>
         </div>
 
         <!-- Document 22 -->
-        <div class="document-box available visited" 
-             onclick="openPDF('pdfs/22_A4 Innovative Sensorized ski boot.pdf', 22)">
+        <div class="document-box available" 
+             onclick="openPDF('pdfs/22_A5 Instruction_FlexTest.pdf', 22)">
             <div class="visited-indicator"></div>
             <div class="doc-number">22</div>
-            <div class="doc-title">Innovative Sensorized Ski Boot (DAHU)</div>
-        </div>
-
-        <!-- Document 23 -->
-        <div class="document-box available visited" 
-             onclick="openPDF('pdfs/23_A5 Instruction_FlexTest.pdf', 23)">
-            <div class="visited-indicator"></div>
-            <div class="doc-number">23</div>
             <div class="doc-title">Instructions – Flex Testing</div>
         </div>
 
-        <!-- Document 24 -->
-        <div class="document-box available visited" 
-             onclick="openPDF('pdfs/24_A4 Sensorized SKI-ALP boot.pdf', 24)">
+        <!-- Document 23 -->
+        <div class="document-box available" 
+             onclick="openPDF('pdfs/23_A4 Sensorized SKI-ALP boot.pdf', 23)">
             <div class="visited-indicator"></div>
-            <div class="doc-number">24</div>
+            <div class="doc-number">23</div>
             <div class="doc-title">Sensorized SKI-ALP Boot</div>
         </div>
 
-        <!-- Document 25 -->
-        <div class="document-box available visited" 
-             onclick="openPDF('pdfs/25_A4 SG SkiBoot.pdf', 25)">
+        <!-- Document 24 -->
+        <div class="document-box available" 
+             onclick="openPDF('pdfs/24_A4 SG SkiBoot.pdf', 24)">
             <div class="visited-indicator"></div>
-            <div class="doc-number">25</div>
+            <div class="doc-number">24</div>
             <div class="doc-title">SG Ski Boot Analysis</div>
         </div>
 
-        <!-- Document 26 -->
-        <div class="document-box available visited" 
-             onclick="openPDF('pdfs/26_A4 Sensorized ski boot (pressure, rotation, load).pdf', 26)">
+        <!-- Document 25 -->
+        <div class="document-box available" 
+             onclick="openPDF('pdfs/25_A4 Sensorized ski boot (pressure, rotation, load).pdf', 25)">
             <div class="visited-indicator"></div>
-            <div class="doc-number">26</div>
+            <div class="doc-number">25</div>
             <div class="doc-title">Sensorized Ski Boot (Pressure, Rotation, Load)</div>
         </div>
 
-        <!-- Document 27 -->
-        <div class="document-box available visited" 
-             onclick="openPDF('pdfs/27_A4 Loads on buckles.pdf', 27)">
+        <!-- Document 26 -->
+        <div class="document-box available" 
+             onclick="openPDF('pdfs/26_A4 Loads on buckles.pdf', 26)">
             <div class="visited-indicator"></div>
-            <div class="doc-number">27</div>
-            <div class="doc-title">Load Analysis on Ski Boot Buckles</div>
+            <div class="doc-number">26</div>
+            <div class="doc-title">Loads on Buckles</div>
         </div>
     </div>
 
