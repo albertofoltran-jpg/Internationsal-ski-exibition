@@ -49,6 +49,17 @@
             font-size: 1.4rem;
             font-weight: 600;
             margin-bottom: 8px;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .exhibition-subtitle {
+            color: #990000;
+            font-size: 1.2rem;
+            font-weight: 700;
         }
 
         .date-location {
@@ -301,6 +312,10 @@
             .exhibition-title {
                 font-size: 1.2rem;
             }
+
+            .exhibition-subtitle {
+                font-size: 1rem;
+            }
             
             .date-location {
                 font-size: 0.9rem;
@@ -401,7 +416,7 @@
             <img src="DII_logo-600x215.jpg" alt="Department Logo" class="unipd-logo" onerror="this.style.display='none'">
         </div>
 
-        <h1 class="exhibition-title">International Ski Exhibition</h1>
+        <h1 class="exhibition-title">International Ski Exhibition <span class="exhibition-subtitle">Scie di gloria</span></h1>
         <div class="date-location">Longarone, 9th January 2026 – 28th February 2026</div>
         <div class="department">Department of Industrial Engineering</div>
     </header>
