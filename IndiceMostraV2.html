@@ -31,7 +31,17 @@
 
         .unipd-logo {
             height: 60px;
-            margin-bottom: 15px;
+            margin-bottom: 0;
+            display: block;
+            object-fit: contain;
+        }
+
+        .header-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: nowrap;
         }
 
         .exhibition-title {
@@ -384,7 +394,7 @@
 </head>
 <body>
     <header class="header">
-        <div style="display:flex; align-items:center; justify-content:center; gap:18px; flex-wrap:wrap;">
+        <div class="header-logos">
             <!-- Logo UniPD (locale se presente) -->
             <img src="logo.jpg" alt="University of Padova Logo" class="unipd-logo" onerror="this.style.display='none'">
             <!-- Logo Dipartimento (locale se presente) -->
