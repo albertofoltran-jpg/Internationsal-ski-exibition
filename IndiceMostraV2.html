@@ -624,18 +624,23 @@
     </footer>
 
     <script>
-        // Gestione stato visitato in memoria (riparte da 0 ad ogni caricamento della pagina)
+        // Gestione stato visitato persistente per la singola scheda (sessionStorage)
         let visitedDocs = [];
+        const SESSION_KEY = 'visitedDocsSession';
 
         // Inizializzazione al caricamento della pagina
         document.addEventListener('DOMContentLoaded', function() {
-            // ogni volta che la pagina viene aperta/caricata, partiamo da 0
-            visitedDocs = [];
+            // Carica lo stato salvato nella stessa scheda (se presente)
+            try {
+                visitedDocs = JSON.parse(sessionStorage.getItem(SESSION_KEY)) || [];
+            } catch (e) {
+                visitedDocs = [];
+            }
             applyVisitedStatus();
             updateProgress();
         });
 
-        // Funzione per aprire PDF e registrare come visitato (solo memoria sessione)
+        // Funzione per aprire PDF e registrare come visitato (sessionStorage)
         function openPDF(url, docNumber) {
             // Apri PDF in nuova finestra
             window.open(url, '_blank');
@@ -643,6 +648,11 @@
             // Registra come visitato se non già registrato
             if (!visitedDocs.includes(docNumber)) {
                 visitedDocs.push(docNumber);
+                try {
+                    sessionStorage.setItem(SESSION_KEY, JSON.stringify(visitedDocs));
+                } catch (e) {
+                    // sessionStorage potrebbe non essere disponibile (privacy mode)
+                }
 
                 // Aggiorna UI
                 const docBox = document.querySelector(`.document-box[onclick*="${docNumber}"]`);
